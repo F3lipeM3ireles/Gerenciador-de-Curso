@@ -1,0 +1,6 @@
+@Gerenciador_de_Curso_HostAddress = http://localhost:5163
+
+GET {{Gerenciador_de_Curso_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
