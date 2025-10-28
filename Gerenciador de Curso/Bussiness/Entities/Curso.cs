@@ -1,4 +1,4 @@
-﻿namespace Gerenciador_de_Curso.Bussiness.Entities
+namespace Gerenciador_de_Curso.Bussiness.Entities
 {
     public class Curso
     {
@@ -17,5 +17,6 @@
 
         public DateTime DataCriacao { get; set; }
         public DateTime? DataAtualizacao { get; set; }
+        public string Categorias { get; set; }
     }
 }
