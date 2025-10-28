@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Gerenciador_de_Curso.Bussiness.Entities;
 using Gerenciador_de_Curso.Bussiness.Interfaces.IRepositories;
 using Gerenciador_de_Curso.Data.Context;
+using iText.Commons.Actions.Contexts;
 
 namespace Gerenciador_de_Curso.Data.Repositories
 {
@@ -106,5 +107,49 @@ namespace Gerenciador_de_Curso.Data.Repositories
 
             return curso.Alunos.Count < curso.LimiteTurma;
         }
+
+
+
+        public class Paginador<TEntity>
+        {
+            public List<TEntity> Itens;
+            public int Pagina;
+            public int ItensPorPagina;
+            public int TotalItens;
+        }
+
+
+        public Paginador<Curso> BuscarCursos(string Categoria, string Nome, int Pagina, int ItensPorPagina) //puxar por categoria
+        {
+            var query = _context.Cursos.Select(curso => curso);
+
+            if (Categoria.Length > 0)
+            {
+                query = query.Where(curso => curso.Categorias.Contains(Categoria));
+            }
+
+            if (Nome.Length > 0)
+            {
+                query = query.Where(curso => curso.Nome.Contains(Nome));
+            }
+
+            var list = query
+                .OrderBy(curso => curso.Nome)
+                .Skip((Pagina - 1) * ItensPorPagina)
+                .Take(ItensPorPagina)
+                .ToList();
+
+            int TotalItens = query.Count();
+
+            Paginador<Curso> paginador = new Paginador<Curso>();
+
+            paginador.Itens = list;
+            paginador.Pagina = Pagina;
+            paginador.ItensPorPagina = ItensPorPagina;
+            paginador.TotalItens = TotalItens;
+
+            return paginador;
+        }
     }
+
 }
